@@ -1,11 +1,9 @@
 import { Router } from "express";
 import {
-  addComment,
   createBlogs,
   deleteBlogs,
   getAllBlogs,
   getBlogById,
-  getComments,
   getFeedBlogs,
   toggleLike,
   updateBlogs,
@@ -20,8 +18,6 @@ blogRouter.get("/:id", isAuthenticated, getBlogById);
 blogRouter.post("/create", isAuthenticated, createBlogs);
 blogRouter.put("/update/:id", isAuthenticated, updateBlogs);
 blogRouter.delete("/delete/:id", isAuthenticated, deleteBlogs);
-blogRouter.post("/like/:id", isAuthenticated, toggleLike);
-blogRouter.post("/comment/:id", isAuthenticated, addComment);
-blogRouter.get("/comments", isAuthenticated, getComments);
+blogRouter.post("/:id/like", isAuthenticated, toggleLike);
 
 export default blogRouter;

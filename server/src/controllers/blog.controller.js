@@ -13,7 +13,7 @@ export const getAllBlogs = asyncHandler(async (req, res, next) => {
     throw new ApiError(404, "No user with this userId exists");
   }
 
-  const blogs = await Blog.find({});
+  const blogs = await Blog.find({}).populate("comments likes");
 
   return res.status(200).json(new ApiResponse(200, blogs, `All Blogs Fetched`));
 });
@@ -152,7 +152,3 @@ export const toggleLike = asyncHandler(async (req, res, next) => {
 
   return res.status(200).json(new ApiResponse(200, null, message));
 });
-
-export const addComment = asyncHandler(async (req, res, next) => {});
-
-export const getComments = asyncHandler(async (req, res, next) => {});
