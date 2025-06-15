@@ -5,6 +5,8 @@ import {
   getAllBlogs,
   getBlogById,
   getFeedBlogs,
+  previewBlog,
+  publishBlog,
   toggleLike,
   updateBlogs,
 } from "../controllers/blog.controller.js";
@@ -25,5 +27,7 @@ blogRouter.put(
 );
 blogRouter.delete("/delete/:id", isAuthenticated, deleteBlogs);
 blogRouter.post("/:id/like", isAuthenticated, toggleLike);
+blogRouter.put("/:id/publish", isAuthenticated, publishBlog);
+blogRouter.put("/:id/preview", isAuthenticated, previewBlog);
 
 export default blogRouter;

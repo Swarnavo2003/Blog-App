@@ -79,14 +79,10 @@ export const updateBlogs = asyncHandler(async (req, res, next) => {
   const userId = req.id;
   const blogId = req.params.id;
 
-  console.log("1");
-
   const user = await User.findById(userId);
   if (!user) {
     throw new ApiError(404, "User not found");
   }
-
-  console.log("2");
 
   const blog = await Blog.findOne({ _id: blogId, author: userId });
 
@@ -96,8 +92,6 @@ export const updateBlogs = asyncHandler(async (req, res, next) => {
     coverImageUrl = req.files.coverImage[0].path;
   }
 
-  console.log("3");
-
   if (coverImageUrl) {
     if (blog.coverImage.public_id !== "") {
       await deleteOnCloudinary(blog.coverImage.public_id);
@@ -105,21 +99,18 @@ export const updateBlogs = asyncHandler(async (req, res, next) => {
 
     const result = await uploadOnCloudinary(coverImageUrl, "coverImages");
 
-    console.log(result);
-
     blog.coverImage.url = result.secure_url;
     blog.coverImage.public_id = result.public_id;
   }
 
-  console.log("4");
-
   if (title) blog.title = title;
   if (description) blog.description = description;
-  if (content) blog.content = content;
-  if (tags) blog.tags = tags.split(",");
+  if (content) {
+    blog.content = content;
+    blog.readTime = Math.ceil(content.split(" ").length / 100);
+  }
+  if (tags) blog.tags = tags.split(",").map((tag) => tag.trim());
   await blog.save();
-
-  console.log("5");
 
   return res
     .status(200)
@@ -202,4 +193,57 @@ export const toggleLike = asyncHandler(async (req, res, next) => {
   }
 
   return res.status(200).json(new ApiResponse(200, null, message));
+});
+
+export const publishBlog = asyncHandler(async (req, res, next) => {
+  const userId = req.id;
+  const blogId = req.params.id;
+
+  if (!userId) {
+    throw new ApiError(404, "No user with this userId exists");
+  }
+
+  if (!blogId) {
+    throw new ApiError(404, "No blog with this id exists");
+  }
+
+  const blog = await Blog.findOne({ _id: blogId, author: userId });
+
+  if (!blog) {
+    throw new ApiError(404, "No blog with this id exists");
+  }
+
+  blog.isPublished = !blog.isPublished;
+  blog.publishedAt = blog.isPublished ? Date.now() : null;
+  await blog.save();
+
+  return res.status(200).json(new ApiResponse(200, blog, `Blog Published`));
+});
+
+export const previewBlog = asyncHandler(async (req, res, next) => {
+  const userId = req.id;
+  const blogId = req.params.id;
+
+  if (!userId) {
+    throw new ApiError(404, "No user with this userId exists");
+  }
+
+  if (!blogId) {
+    throw new ApiError(404, "No blog with this id exists");
+  }
+
+  const blog = await Blog.findById(blogId);
+  if (!blog) {
+    throw new ApiError(404, "No blog with this id exists");
+  }
+
+  if (!blog.readers.includes(userId)) {
+    blog.readers.push(userId);
+    blog.views++;
+    await blog.save();
+    return res.status(200).json(new ApiResponse(200, null, `Blog Previewed`));
+  }
+  return res
+    .status(200)
+    .json(new ApiResponse(200, null, `Blog Already Previewed`));
 });
