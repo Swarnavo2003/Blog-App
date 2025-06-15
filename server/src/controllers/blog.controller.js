@@ -4,6 +4,7 @@ import Blog from "../models/blog.model.js";
 import User from "../models/user.model.js";
 import { ApiResponse } from "../utils/api-response.js";
 import Like from "../models/like.model.js";
+import { deleteOnCloudinary, uploadOnCloudinary } from "../utils/cloudinary.js";
 
 export const getAllBlogs = asyncHandler(async (req, res, next) => {
   const userId = req.id;
@@ -73,7 +74,57 @@ export const createBlogs = asyncHandler(async (req, res, next) => {
     .json(new ApiResponse(201, newBlog, `New Blog Created`));
 });
 
-export const updateBlogs = asyncHandler(async (req, res, next) => {});
+export const updateBlogs = asyncHandler(async (req, res, next) => {
+  const { title, description, content, tags } = req.body;
+  const userId = req.id;
+  const blogId = req.params.id;
+
+  console.log("1");
+
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  console.log("2");
+
+  const blog = await Blog.findOne({ _id: blogId, author: userId });
+
+  let coverImageUrl;
+  if (req.files) {
+    console.log(req.files);
+    coverImageUrl = req.files.coverImage[0].path;
+  }
+
+  console.log("3");
+
+  if (coverImageUrl) {
+    if (blog.coverImage.public_id !== "") {
+      await deleteOnCloudinary(blog.coverImage.public_id);
+    }
+
+    const result = await uploadOnCloudinary(coverImageUrl, "coverImages");
+
+    console.log(result);
+
+    blog.coverImage.url = result.secure_url;
+    blog.coverImage.public_id = result.public_id;
+  }
+
+  console.log("4");
+
+  if (title) blog.title = title;
+  if (description) blog.description = description;
+  if (content) blog.content = content;
+  if (tags) blog.tags = tags.split(",");
+  await blog.save();
+
+  console.log("5");
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, blog, "Blog updated successfully"));
+});
 
 export const deleteBlogs = asyncHandler(async (req, res, next) => {
   const userId = req.id;

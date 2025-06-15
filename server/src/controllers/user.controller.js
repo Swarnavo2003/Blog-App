@@ -99,7 +99,7 @@ export const updateUser = asyncHandler(async (req, res, next) => {
 
   let avatarUrl;
   if (req.files) {
-    console.log(req.files);
+    // console.log(req.files);
     avatarUrl = req.files.avatar[0].path;
   }
 

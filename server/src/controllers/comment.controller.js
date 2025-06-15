@@ -105,3 +105,51 @@ export const getComments = asyncHandler(async (req, res, next) => {
 
   return res.status(200).json(new ApiResponse(200, comment, null));
 });
+
+export const updateComment = asyncHandler(async (req, res) => {
+  const { content } = req.body;
+  const userId = req.id;
+  const commentId = req.params.id;
+
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new ApiError(404, "No user with this userId exists");
+  }
+
+  const comment = await Comment.findOne({ _id: commentId, author: userId });
+  if (!comment) {
+    throw new ApiError(404, "No comment with this id exists");
+  }
+
+  if (!content) {
+    throw new ApiError(400, "All fields are required");
+  }
+
+  comment.content = content;
+  await comment.save();
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, null, "Your comment updated"));
+});
+
+export const deleteComment = asyncHandler(async (req, res) => {
+  const userId = req.id;
+  const commentId = req.params.id;
+
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new ApiError(404, "No user with this userId exists");
+  }
+
+  const comment = await Comment.findOne({ _id: commentId, author: userId });
+  if (!comment) {
+    throw new ApiError(404, "No comment with this id exists");
+  }
+
+  await Comment.deleteOne({ _id: commentId, author: userId });
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, null, "Your comment deleted"));
+});

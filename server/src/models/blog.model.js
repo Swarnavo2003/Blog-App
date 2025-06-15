@@ -15,7 +15,14 @@ const blogSchema = new Schema(
       type: String,
     },
     coverImage: {
-      type: String,
+      type: {
+        url: String,
+        public_id: String,
+      },
+      default: {
+        url: "https://placehold.co/600x400",
+        public_id: "",
+      },
     },
     author: {
       type: Schema.Types.ObjectId,
