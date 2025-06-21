@@ -34,6 +34,37 @@ export const addComment = asyncHandler(async (req, res, next) => {
   return res.status(200).json(new ApiResponse(200, null, "Your comment added"));
 });
 
+export const commentOnComment = asyncHandler(async (req, res, next) => {
+  const { content } = req.body;
+  const userId = req.id;
+  const commentId = req.params.id;
+
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new ApiError(404, "No user with this userId exists");
+  }
+
+  const existingComment = await Comment.findById(commentId);
+  if (!existingComment) {
+    throw new ApiError(404, "No comment with this id exists");
+  }
+
+  const newComment = await Comment.create({
+    content,
+    author: userId,
+    blog: existingComment.blog,
+    parent: commentId,
+  });
+
+  await existingComment.updateOne({
+    $push: { comments: newComment._id },
+  });
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, null, "Your comment on comment added"));
+});
+
 export const togglelikeComment = asyncHandler(async (req, res, next) => {
   const userId = req.id;
   const commentId = req.params.id;

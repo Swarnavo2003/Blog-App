@@ -2,6 +2,7 @@ import { Router } from "express";
 import { isAuthenticated } from "../middlewares/auth.middleware.js";
 import {
   addComment,
+  commentOnComment,
   deleteComment,
   getComments,
   togglelikeComment,
@@ -11,6 +12,7 @@ import {
 const commentRouter = Router();
 
 commentRouter.post("/:id", isAuthenticated, addComment);
+commentRouter.post("/:id/comment", isAuthenticated, commentOnComment);
 commentRouter.post("/:id/like", isAuthenticated, togglelikeComment);
 commentRouter.get("/:id/all", isAuthenticated, getComments);
 commentRouter.put("/:id/update", isAuthenticated, updateComment);

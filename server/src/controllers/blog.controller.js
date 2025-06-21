@@ -14,7 +14,9 @@ export const getAllBlogs = asyncHandler(async (req, res, next) => {
     throw new ApiError(404, "No user with this userId exists");
   }
 
-  const blogs = await Blog.find({}).populate("comments likes");
+  const blogs = await Blog.find({})
+    .populate("comments likes")
+    .sort({ createdAt: -1 });
 
   return res.status(200).json(new ApiResponse(200, blogs, `All Blogs Fetched`));
 });
@@ -22,14 +24,25 @@ export const getAllBlogs = asyncHandler(async (req, res, next) => {
 export const getFeedBlogs = asyncHandler(async (req, res, next) => {
   const userId = req.id;
 
-  const user = await User.findById(userId).select("following");
+  const user = await User.findById(userId);
   if (!user) {
     throw new ApiError(404, "No user with this userId exists");
   }
 
-  // Aggregation Pipeline
+  const feedBlogs = await Blog.find({
+    author: { $in: user.following },
+    isPublished: true,
+  })
+    .populate("author")
+    .sort({ createdAt: -1 });
 
-  return res.status(200).json(new ApiResponse(200, {}, "Feed Blogs Fetched"));
+  if (!feedBlogs) {
+    throw new ApiError(404, "No feedBlogs found");
+  }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, feedBlogs, "Feed Blogs Fetched"));
 });
 
 export const getBlogById = asyncHandler(async (req, res, next) => {
