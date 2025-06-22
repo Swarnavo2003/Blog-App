@@ -20,12 +20,6 @@ const commentSchema = new Schema(
         ref: "Like",
       },
     ],
-    comments: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Comment",
-      },
-    ],
     totalLikes: {
       type: Number,
       required: true,
