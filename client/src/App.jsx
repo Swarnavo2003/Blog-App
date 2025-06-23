@@ -1,8 +1,22 @@
+import { Routes, Route } from "react-router";
+import HomePage from "./pages/HomePage";
+import ProfilePage from "./pages/ProfilePage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import RootLayout from "./layouts/RootLayout";
+
 function App() {
   return (
-    <div>
-      <h1>Welcome to Blog App</h1>
-    </div>
+    <Routes>
+      <Route element={<RootLayout />}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+      </Route>
+      <Route path="/blog/:id" element={<h1>Blog Preview</h1>} />
+      <Route path="/blog/create" element={<h1>Blog Creation</h1>} />
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+    </Routes>
   );
 }
 
