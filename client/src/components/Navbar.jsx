@@ -14,9 +14,11 @@ const Navbar = () => {
               Write
             </li>
           </ul>
-          <button class="btn btn-secondary text-lg font-bold">
-            Get Started
-          </button>
+          <Link to={"/login"}>
+            <button class="btn btn-secondary text-lg font-bold">
+              Get Started
+            </button>
+          </Link>
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import Footer from "../components/Footer";
-import anime from "../../public/anime.webp";
+import anime from "../assets/anime.webp";
 
 const HomePage = () => {
   return (
