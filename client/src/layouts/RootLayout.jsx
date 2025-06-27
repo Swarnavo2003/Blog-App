@@ -1,11 +1,12 @@
 import { Outlet } from "react-router";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 const RootLayout = () => {
   return (
-    <div>
-      <h1>Navbar</h1>
+    <div className="relative h-screen overflow-y-auto">
+      <Navbar />
       <Outlet />
-      <h1>Footer</h1>
     </div>
   );
 };
