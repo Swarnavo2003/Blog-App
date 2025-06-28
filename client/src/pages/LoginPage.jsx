@@ -1,34 +1,25 @@
 import { IoMdMail } from "react-icons/io";
 import { FaKey, FaUser } from "react-icons/fa6";
 import { FiLoader } from "react-icons/fi";
-import axios from "axios";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router";
+import { useAuthStore } from "../store/useAuthStore";
+import toast from "react-hot-toast";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const { isLoggingIn, loginUser } = useAuthStore();
+
   const submitInputHandler = async () => {
-    setLoading(true);
     try {
-      const res = await axios.post("http://localhost:5000/api/v1/user/login", {
-        username,
-        email,
-        password,
-      });
-      if (res.data.success) {
-        toast.success(res.data.message);
-        navigate("/");
-      }
+      await loginUser({ username, email, password });
+      navigate("/");
     } catch (error) {
-      toast.error(error.response.data.message);
-    } finally {
-      setLoading(false);
+      toast.error(error);
     }
   };
   return (
@@ -85,10 +76,10 @@ const LoginPage = () => {
           <div className="w-full card-actions">
             <button
               onClick={submitInputHandler}
-              disabled={loading}
+              disabled={isLoggingIn}
               className="btn btn-primary text-xl btn-lg w-full mt-2"
             >
-              {loading ? (
+              {isLoggingIn ? (
                 <>
                   <FiLoader className="animate-spin" />
                   <span>Please Wait</span>

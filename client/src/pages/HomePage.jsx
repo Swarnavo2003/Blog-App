@@ -1,7 +1,11 @@
 import Footer from "../components/Footer";
 import anime from "../assets/anime.webp";
+import { Link } from "react-router";
+import { useAuthStore } from "../store/useAuthStore";
 
 const HomePage = () => {
+  const { authUser } = useAuthStore();
+
   return (
     <div className="pt-20 min-h-screen relative">
       <div className="w-full h-[610px]">
@@ -14,7 +18,19 @@ const HomePage = () => {
               reading
             </p>
             <div className="px-10 pt-5">
-              <button className="btn btn-xl rounded-full">Get Started</button>
+              {authUser ? (
+                <Link to="blogs">
+                  <button className="btn btn-xl rounded-full">
+                    Write Something...
+                  </button>
+                </Link>
+              ) : (
+                <Link to="/login">
+                  <button className="btn btn-xl rounded-full">
+                    Get Started
+                  </button>
+                </Link>
+              )}
             </div>
           </div>
 
