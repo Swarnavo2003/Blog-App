@@ -14,7 +14,12 @@ const Footer = () => {
     <div className="absolute bottom-0 left-0 w-full border-t py-4">
       <div className="w-full h-full flex items-center justify-center gap-10">
         {items.map((item) => (
-          <span key={item.id}>{item.name}</span>
+          <span
+            key={item.id}
+            className="text-sm font-semibold hover:underline cursor-pointer"
+          >
+            {item.name}
+          </span>
         ))}
       </div>
     </div>

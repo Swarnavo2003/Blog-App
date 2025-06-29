@@ -6,7 +6,7 @@ import RegisterPage from "./pages/RegisterPage";
 import RootLayout from "./layouts/RootLayout";
 import { useAuthStore } from "./store/useAuthStore";
 import { useEffect } from "react";
-import { FiLoader } from "react-icons/fi";
+import Loader from "./components/Loader";
 
 function App() {
   const { getProfile, isgettingProfile } = useAuthStore();
@@ -16,11 +16,7 @@ function App() {
   }, []);
 
   if (isgettingProfile) {
-    return (
-      <div className="w-full h-screen flex items-center justify-center">
-        <FiLoader className="w-20 h-20 animate-spin" />
-      </div>
-    );
+    return <Loader />;
   }
   return (
     <Routes>

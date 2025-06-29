@@ -1,10 +1,10 @@
 import { IoMdMail } from "react-icons/io";
-import { FaKey, FaUser } from "react-icons/fa6";
+import { FaEye, FaEyeSlash, FaKey, FaUser } from "react-icons/fa6";
 import { FiLoader } from "react-icons/fi";
-import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router";
+import { useAuthStore } from "../store/useAuthStore";
 
 const RegisterPage = () => {
   const [firstname, setFirstname] = useState("");
@@ -12,30 +12,17 @@ const RegisterPage = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const { isRegistering, registerUser } = useAuthStore();
   const navigate = useNavigate();
 
   const submitInputHandler = async () => {
-    setLoading(true);
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/v1/user/register",
-        {
-          firstname,
-          lastname,
-          username,
-          email,
-          password,
-        }
-      );
-      if (res.data.success) {
-        toast.success(res.data.message);
-        navigate("/login");
-      }
+      await registerUser({ firstname, lastname, username, email, password });
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error);
     } finally {
-      setLoading(false);
+      navigate("/login");
     }
   };
   return (
@@ -109,27 +96,38 @@ const RegisterPage = () => {
               <input
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                type="password"
+                type={showPassword ? "text" : "password"}
                 required
                 placeholder="Password"
                 className="placeholder:text-xl text-xl"
               />
+              {showPassword ? (
+                <FaEyeSlash
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="cursor-pointer size-6"
+                />
+              ) : (
+                <FaEye
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="cursor-pointer size-6"
+                />
+              )}
             </label>
           </div>
 
           <div className="w-full card-actions">
             <button
               onClick={submitInputHandler}
-              disabled={loading}
+              disabled={isRegistering}
               className="btn btn-primary text-xl btn-lg w-full mt-2"
             >
-              {loading ? (
+              {isRegistering ? (
                 <>
                   <FiLoader className="animate-spin" />
                   <span>Please Wait</span>
                 </>
               ) : (
-                "Login"
+                "Register"
               )}
             </button>
           </div>
