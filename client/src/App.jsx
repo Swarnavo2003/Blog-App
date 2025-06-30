@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router";
+import { Routes, Route, Navigate } from "react-router";
 import HomePage from "./pages/HomePage";
 import ProfilePage from "./pages/ProfilePage";
 import LoginPage from "./pages/LoginPage";
@@ -7,28 +7,67 @@ import RootLayout from "./layouts/RootLayout";
 import { useAuthStore } from "./store/useAuthStore";
 import { useEffect } from "react";
 import Loader from "./components/Loader";
+import BlogsPage from "./pages/BlogsPage";
+import BlogPreview from "./pages/BlogPreview";
+import CreateBlog from "./pages/CreateBlog";
+import ProtectedRoutes from "./components/ProtectedRoutes";
 
 function App() {
-  const { getProfile, isgettingProfile } = useAuthStore();
+  const { authUser, getProfile, hasFetchedProfile } = useAuthStore();
 
   useEffect(() => {
     getProfile();
-  }, []);
+  }, [getProfile]);
 
-  if (isgettingProfile) {
+  if (!hasFetchedProfile) {
     return <Loader />;
   }
   return (
     <Routes>
       <Route element={<RootLayout />}>
         <Route path="/" element={<HomePage />} />
-        <Route path="/profile" element={<ProfilePage />} />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoutes>
+              <ProfilePage />
+            </ProtectedRoutes>
+          }
+        />
       </Route>
-      <Route path="/blogs" element={<h1>Blogs</h1>} />
-      <Route path="/blog/:id" element={<h1>Blog Preview</h1>} />
-      <Route path="/blog/create" element={<h1>Blog Creation</h1>} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
+      <Route
+        path="/blogs"
+        element={
+          <ProtectedRoutes>
+            <BlogsPage />
+          </ProtectedRoutes>
+        }
+      />
+      <Route
+        path="/blog/:id"
+        element={
+          <ProtectedRoutes>
+            <BlogPreview />
+          </ProtectedRoutes>
+        }
+      />
+      <Route
+        path="/blog/create"
+        element={
+          <ProtectedRoutes>
+            <CreateBlog />
+          </ProtectedRoutes>
+        }
+      />
+
+      <Route
+        path="/login"
+        element={!authUser ? <LoginPage /> : <Navigate to="/" />}
+      />
+      <Route
+        path="/register"
+        element={!authUser ? <RegisterPage /> : <Navigate to="/" />}
+      />
     </Routes>
   );
 }

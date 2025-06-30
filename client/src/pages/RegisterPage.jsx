@@ -19,10 +19,9 @@ const RegisterPage = () => {
   const submitInputHandler = async () => {
     try {
       await registerUser({ firstname, lastname, username, email, password });
+      navigate("/login");
     } catch (error) {
       toast.error(error);
-    } finally {
-      navigate("/login");
     }
   };
   return (
@@ -56,7 +55,7 @@ const RegisterPage = () => {
                 required
                 placeholder="Lastname"
                 title="Only letters, numbers or dash"
-                className="placeholder:text-xl text-xl"
+                className="placeholder:text-xl text-sm"
               />
             </label>
           </div>
@@ -71,7 +70,7 @@ const RegisterPage = () => {
                 required
                 placeholder="Username"
                 title="Only letters, numbers or dash"
-                className="placeholder:text-xl text-xl"
+                className="placeholder:text-xl text-sm"
               />
             </label>
           </div>
@@ -85,7 +84,7 @@ const RegisterPage = () => {
                 type="email"
                 placeholder="mail@site.com"
                 required
-                className="placeholder:text-xl text-xl"
+                className="placeholder:text-xl text-sm"
               />
             </label>
           </div>
@@ -99,7 +98,7 @@ const RegisterPage = () => {
                 type={showPassword ? "text" : "password"}
                 required
                 placeholder="Password"
-                className="placeholder:text-xl text-xl"
+                className="placeholder:text-xl text-sm"
               />
               {showPassword ? (
                 <FaEyeSlash

@@ -8,6 +8,7 @@ export const useAuthStore = create((set) => ({
   isLoggingIn: false,
   isLoggingOut: false,
   isgettingProfile: false,
+  hasFetchedProfile: false,
 
   getProfile: async () => {
     set({ isgettingProfile: true });
@@ -17,9 +18,10 @@ export const useAuthStore = create((set) => ({
       set({ authUser: res.data.data });
       // toast.success(res.data.message);
     } catch (error) {
-      toast.error(error.response.data.message);
+      set({ authUser: null });
+      toast.error(error.response.data.message || "Session expred");
     } finally {
-      set({ isgettingProfile: false });
+      set({ isgettingProfile: false, hasFetchedProfile: true });
     }
   },
 

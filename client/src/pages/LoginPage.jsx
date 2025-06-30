@@ -1,5 +1,5 @@
 import { IoMdMail } from "react-icons/io";
-import { FaKey, FaUser } from "react-icons/fa6";
+import { FaEye, FaEyeSlash, FaKey, FaUser } from "react-icons/fa6";
 import { FiLoader } from "react-icons/fi";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
@@ -11,7 +11,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-
+  const [showPassword, setShowPassword] = useState(false);
   const { isLoggingIn, loginUser } = useAuthStore();
 
   const submitInputHandler = async () => {
@@ -40,7 +40,7 @@ const LoginPage = () => {
                 required
                 placeholder="Username"
                 title="Only letters, numbers or dash"
-                className="placeholder:text-xl text-xl"
+                className="placeholder:text-lg text-sm font-semibold"
               />
             </label>
           </div>
@@ -54,7 +54,7 @@ const LoginPage = () => {
                 type="email"
                 placeholder="mail@site.com"
                 required
-                className="placeholder:text-xl text-xl"
+                className="placeholder:text-lg text-sm font-semibold"
               />
             </label>
           </div>
@@ -65,11 +65,22 @@ const LoginPage = () => {
               <input
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                type="password"
+                type={showPassword ? "text" : "password"}
                 required
                 placeholder="Password"
-                className="placeholder:text-xl text-xl"
+                className="placeholder:text-lg text-sm font-semibold"
               />
+              {showPassword ? (
+                <FaEyeSlash
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="cursor-pointer size-6"
+                />
+              ) : (
+                <FaEye
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="cursor-pointer size-6"
+                />
+              )}
             </label>
           </div>
 
