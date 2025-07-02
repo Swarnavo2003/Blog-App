@@ -13,15 +13,17 @@ import CreateBlog from "./pages/CreateBlog";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 
 function App() {
-  const { authUser, getProfile, hasFetchedProfile } = useAuthStore();
+  const { authUser, getProfile, isgettingProfile, hasFetchedProfile } =
+    useAuthStore();
 
   useEffect(() => {
     getProfile();
   }, [getProfile]);
 
-  if (!hasFetchedProfile) {
+  if (!isgettingProfile && !hasFetchedProfile) {
     return <Loader />;
   }
+
   return (
     <Routes>
       <Route element={<RootLayout />}>

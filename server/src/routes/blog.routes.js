@@ -5,6 +5,7 @@ import {
   getAllBlogs,
   getBlogById,
   getFeedBlogs,
+  getUserBlogs,
   previewBlog,
   publishBlog,
   toggleLike,
@@ -16,6 +17,7 @@ import { upload } from "../middlewares/multer.middleware.js";
 const blogRouter = Router();
 
 blogRouter.get("/all", isAuthenticated, getAllBlogs);
+blogRouter.get("/author", isAuthenticated, getUserBlogs);
 blogRouter.get("/feed", isAuthenticated, getFeedBlogs);
 blogRouter.get("/:id", isAuthenticated, getBlogById);
 blogRouter.post("/create", isAuthenticated, createBlogs);
