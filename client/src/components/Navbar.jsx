@@ -74,7 +74,7 @@ const Navbar = () => {
                       </Link>
                     </li>
                     <li>
-                      <Link to="/write">
+                      <Link to="/blog/create">
                         <FaPen size={12} />
                         New Story
                       </Link>

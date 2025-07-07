@@ -10,11 +10,23 @@ export const useBlogStore = create((set) => ({
   isGettingAuthorBlogs: false,
   isGettingBlog: false,
 
+  getBlogs: async () => {
+    set({ isGettingBlogs: true });
+    try {
+      const res = await axiosInstance.get(`/blog/all`);
+      set({ blogs: res.data.data });
+    } catch (error) {
+      toast.error(error.response.data.message || "Something went wrong");
+    } finally {
+      set({ isGettingBlogs: false });
+    }
+  },
+
   getAuthorBlogs: async () => {
     set({ isGettingAuthorBlogs: true });
     try {
       const res = await axiosInstance.get(`/blog/author`);
-      console.log(res.data.data);
+      // console.log(res.data.data);
       set({ authorBlogs: res.data.data });
     } catch (error) {
       toast.error(error.response.data.message || "Something went wrong");
