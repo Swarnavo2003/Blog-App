@@ -24,7 +24,7 @@ const BlogCard = ({ blog }) => {
         </h2>
 
         {/* Description */}
-        <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3">
+        <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-3 truncate">
           {blog.description}
         </p>
 
