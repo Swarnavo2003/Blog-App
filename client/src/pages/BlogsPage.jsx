@@ -2,10 +2,11 @@ import { FaChevronLeft } from "react-icons/fa";
 import BlogsContainer from "../components/BlogsContainer";
 import { useBlogStore } from "../store/useBlogStore";
 import { useEffect } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 const BlogsPage = () => {
   const { getBlogs } = useBlogStore();
+  const navigate = useNavigate();
 
   useEffect(() => {
     getBlogs();
@@ -20,7 +21,10 @@ const BlogsPage = () => {
             <span className="text-sm">Back</span>
           </button>
         </Link>
-        <button className="bg-blue-600 text-white px-5 py-2 rounded-xl shadow hover:bg-blue-700 transition-all">
+        <button
+          onClick={() => navigate("/blog/create")}
+          className="bg-blue-600 text-white px-5 py-2 rounded-xl shadow hover:bg-blue-700 transition-all"
+        >
           Create Blog
         </button>
       </div>

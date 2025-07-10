@@ -20,7 +20,7 @@ function App() {
     getProfile();
   }, [getProfile]);
 
-  if (!isgettingProfile && !hasFetchedProfile) {
+  if (isgettingProfile && !hasFetchedProfile) {
     return <Loader />;
   }
 

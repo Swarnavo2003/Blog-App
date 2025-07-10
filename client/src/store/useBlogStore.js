@@ -9,6 +9,7 @@ export const useBlogStore = create((set) => ({
   isGettingBlogs: false,
   isGettingAuthorBlogs: false,
   isGettingBlog: false,
+  isCreatingBlog: false,
 
   getBlogs: async () => {
     set({ isGettingBlogs: true });
@@ -44,6 +45,21 @@ export const useBlogStore = create((set) => ({
       toast.error(error.response.data.message || "Session expred");
     } finally {
       set({ isGettingBlog: false });
+    }
+  },
+
+  createBlog: async (data) => {
+    set({ isCreatingBlog: true });
+    try {
+      const res = await axiosInstance.post(`/blog/create`, data);
+
+      if (res.data.success) {
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      toast.error(error.response.data.message || "Session expred");
+    } finally {
+      set({ isCreatingBlog: false });
     }
   },
 }));
