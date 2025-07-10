@@ -28,6 +28,13 @@ const CreateBlog = () => {
   const submitHandler = async () => {
     try {
       await createBlog({ title, description });
+
+      document.getElementById("my_modal_2").close();
+
+      getAuthorBlogs();
+
+      setTitle("");
+      setDescription("");
     } catch (error) {
       toast.error(error.message);
     }

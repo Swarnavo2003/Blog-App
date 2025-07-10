@@ -23,9 +23,9 @@ const CreateBlogTable = ({ authorBlogs }) => {
               </td>
             </tr>
           ) : (
-            authorBlogs.map((blog) => (
+            authorBlogs.map((blog, index) => (
               <tr key={blog._id}>
-                <th>1</th>
+                <th>{index + 1}</th>
                 <td>{blog.title}</td>
                 <td>{blog.description}</td>
                 <td>{blog.createdAt.split("T")[0]}</td>
