@@ -53,7 +53,7 @@ const CreateBlog = () => {
           className="btn"
           onClick={() => document.getElementById("my_modal_2").showModal()}
         >
-          open modal
+          Create
         </button>
         <dialog id="my_modal_2" className="modal">
           <div className="modal-box space-y-2">

@@ -2,7 +2,7 @@ import toast from "react-hot-toast";
 import { create } from "zustand";
 import { axiosInstance } from "../api/axios";
 
-export const useBlogStore = create((set) => ({
+export const useBlogStore = create((set, get) => ({
   blogs: [],
   authorBlogs: [],
   blog: null,
@@ -10,6 +10,7 @@ export const useBlogStore = create((set) => ({
   isGettingAuthorBlogs: false,
   isGettingBlog: false,
   isCreatingBlog: false,
+  isDeletingBlog: false,
 
   getBlogs: async () => {
     set({ isGettingBlogs: true });
@@ -60,6 +61,24 @@ export const useBlogStore = create((set) => ({
       toast.error(error.response.data.message || "Session expred");
     } finally {
       set({ isCreatingBlog: false });
+    }
+  },
+
+  deleteBlog: async (id) => {
+    set({ isDeletingBlog: true });
+    try {
+      const res = await axiosInstance.delete(`/blog/delete/${id}`);
+      if (res.data.success) {
+        const updatedAuthorBlogs = get().authorBlogs.filter(
+          (blog) => blog._id !== id
+        );
+        set({ authorBlogs: updatedAuthorBlogs });
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      toast.error(error.response.data.message || "Blog Deletion Error");
+    } finally {
+      set({ isDeletingBlog: false });
     }
   },
 }));

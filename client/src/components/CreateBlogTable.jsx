@@ -1,6 +1,10 @@
 import { HiDotsVertical } from "react-icons/hi";
+import { FiEdit } from "react-icons/fi";
+import { FaRegTrashCan } from "react-icons/fa6";
+import { useBlogStore } from "../store/useBlogStore";
 
 const CreateBlogTable = ({ authorBlogs }) => {
+  const { deleteBlog } = useBlogStore();
   return (
     <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 shadow-lg">
       <table className="table">
@@ -30,9 +34,29 @@ const CreateBlogTable = ({ authorBlogs }) => {
                 <td>{blog.description}</td>
                 <td>{blog.createdAt.split("T")[0]}</td>
                 <td>
-                  <button className="btn btn-ghost">
-                    <HiDotsVertical />
-                  </button>
+                  <div className="dropdown dropdown-end">
+                    <div tabIndex={0} role="button" className="btn m-1">
+                      <button>
+                        <HiDotsVertical />
+                      </button>
+                    </div>
+                    <ul
+                      tabIndex={0}
+                      className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
+                    >
+                      <li className="flex gap-2">
+                        {/* <FiEdit className="text-black" /> */}
+                        <span>Edit</span>
+                      </li>
+                      <li
+                        className="flex gap-2"
+                        onClick={() => deleteBlog(blog._id)}
+                      >
+                        {/* <FaRegTrashCan /> */}
+                        <span>Delete</span>
+                      </li>
+                    </ul>
+                  </div>
                 </td>
               </tr>
             ))
