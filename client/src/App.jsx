@@ -6,23 +6,18 @@ import RegisterPage from "./pages/RegisterPage";
 import RootLayout from "./layouts/RootLayout";
 import { useAuthStore } from "./store/useAuthStore";
 import { useEffect } from "react";
-import Loader from "./components/Loader";
 import BlogsPage from "./pages/BlogsPage";
 import BlogPreview from "./pages/BlogPreview";
 import CreateBlog from "./pages/CreateBlog";
 import ProtectedRoutes from "./components/ProtectedRoutes";
+import Loader from "./components/Loader";
 
 function App() {
-  const { authUser, getProfile, isgettingProfile, hasFetchedProfile } =
-    useAuthStore();
+  const { authUser, getProfile } = useAuthStore();
 
   useEffect(() => {
     getProfile();
   }, [getProfile]);
-
-  if (isgettingProfile && !hasFetchedProfile) {
-    return <Loader />;
-  }
 
   return (
     <Routes>

@@ -5,22 +5,31 @@ import {
   FaEdit,
   FaHeart,
   FaPen,
-  FaLink,
-  FaCalendarAlt,
   FaUser,
 } from "react-icons/fa";
 import { useAuthStore } from "../store/useAuthStore";
 import { useBlogStore } from "../store/useBlogStore";
 import UserBlogsList from "../components/UserBlogsList";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const ProfilePage = () => {
-  const { authUser } = useAuthStore();
+  const { authUser, updateUser } = useAuthStore();
   const { getAuthorBlogs } = useBlogStore();
+
+  const [firstname, setFirstname] = useState(authUser?.firstname || "");
+  const [lastname, setLastname] = useState(authUser?.lastname || "");
+  const [bio, setBio] = useState(authUser?.bio || "");
+  const [twitter, setTwitter] = useState(authUser?.socialLinks?.twitter || "");
+  const [github, setGithub] = useState(authUser?.socialLinks?.github || "");
+  const [website, setWebsite] = useState(authUser?.socialLinks?.website || "");
 
   useEffect(() => {
     getAuthorBlogs(authUser?._id);
   }, [getAuthorBlogs, authUser]);
+
+  // const updateUserHandler = () => {
+  //   updateUser({firstname,lastname,})
+  // }
 
   if (!authUser)
     return (
@@ -190,7 +199,8 @@ const ProfilePage = () => {
                 </label>
                 <input
                   type="text"
-                  defaultValue={authUser.firstname}
+                  value={firstname}
+                  onChange={(e) => setFirstname(e.target.value)}
                   className="input input-bordered"
                 />
               </div>
@@ -200,7 +210,8 @@ const ProfilePage = () => {
                 </label>
                 <input
                   type="text"
-                  defaultValue={authUser.lastname}
+                  value={lastname}
+                  onChange={(e) => setLastname(e.target.value)}
                   className="input input-bordered"
                 />
               </div>
@@ -212,7 +223,8 @@ const ProfilePage = () => {
               </label>
               <textarea
                 className="textarea textarea-bordered w-full"
-                defaultValue={authUser.bio || ""}
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
                 placeholder="Tell us about yourself..."
               />
             </div>
@@ -226,7 +238,8 @@ const ProfilePage = () => {
                 </label>
                 <input
                   type="text"
-                  defaultValue={authUser.twitter || ""}
+                  value={twitter}
+                  onChange={(e) => setTwitter(e.target.value)}
                   className="input input-bordered"
                   placeholder="@username"
                 />
@@ -239,7 +252,8 @@ const ProfilePage = () => {
                 </label>
                 <input
                   type="text"
-                  defaultValue={authUser.github || ""}
+                  value={github}
+                  onChange={(e) => setGithub(e.target.value)}
                   className="input input-bordered"
                 />
               </div>
@@ -251,7 +265,8 @@ const ProfilePage = () => {
                 </label>
                 <input
                   type="url"
-                  defaultValue={authUser.website || ""}
+                  value={website}
+                  onChange={(e) => setWebsite(e.target.value)}
                   className="input input-bordered"
                   placeholder="https://example.com"
                 />

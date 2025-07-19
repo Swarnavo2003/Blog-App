@@ -89,19 +89,22 @@ export const getProfile = asyncHandler(async (req, res, next) => {
 
 export const updateUser = asyncHandler(async (req, res, next) => {
   const { username, bio, twitter, github, website } = req.body;
+  console.log(req.body);
+
   const userId = req.id;
 
   const user = await User.findById(userId);
+  console.log(user);
 
   if (!user) {
     throw new ApiError(404, "User not found");
   }
 
   let avatarUrl;
-  if (req.files) {
-    // console.log(req.files);
+  if (req.files && req.files.avatar && req.files.avatar.length > 0) {
     avatarUrl = req.files.avatar[0].path;
   }
+  console.log("1");
 
   if (avatarUrl) {
     if (user.avatar.public_id !== "") {
@@ -124,7 +127,7 @@ export const updateUser = asyncHandler(async (req, res, next) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, null, "User Updated Successfully"));
+    .json(new ApiResponse(200, user, "User Updated Successfully"));
 });
 
 export const toggleFollow = asyncHandler(async (req, res, next) => {

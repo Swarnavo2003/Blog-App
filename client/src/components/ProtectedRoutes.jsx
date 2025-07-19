@@ -3,9 +3,9 @@ import { useAuthStore } from "../store/useAuthStore";
 import Loader from "./Loader";
 
 const ProtectedRoutes = ({ children }) => {
-  const { authUser, isgettingProfile, hasFetchedProfile } = useAuthStore();
+  const { authUser, isgettingProfile } = useAuthStore();
 
-  if (isgettingProfile || !hasFetchedProfile) return <Loader />;
+  if (isgettingProfile && !authUser) return <Loader />;
 
   return authUser ? children : <Navigate to="/login" />;
 };
