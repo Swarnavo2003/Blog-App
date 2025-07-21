@@ -88,13 +88,11 @@ export const getProfile = asyncHandler(async (req, res, next) => {
 });
 
 export const updateUser = asyncHandler(async (req, res, next) => {
-  const { username, bio, twitter, github, website } = req.body;
-  console.log(req.body);
+  const { firstname, lastname, bio, twitter, github, website } = req.body;
 
   const userId = req.id;
 
   const user = await User.findById(userId);
-  console.log(user);
 
   if (!user) {
     throw new ApiError(404, "User not found");
@@ -104,7 +102,6 @@ export const updateUser = asyncHandler(async (req, res, next) => {
   if (req.files && req.files.avatar && req.files.avatar.length > 0) {
     avatarUrl = req.files.avatar[0].path;
   }
-  console.log("1");
 
   if (avatarUrl) {
     if (user.avatar.public_id !== "") {
@@ -112,13 +109,13 @@ export const updateUser = asyncHandler(async (req, res, next) => {
     }
 
     const result = await uploadOnCloudinary(avatarUrl, "avatars");
-    console.log(result);
 
     user.avatar.url = result.secure_url;
     user.avatar.public_id = result.public_id;
   }
 
-  if (username) user.username = username;
+  if (firstname) user.firstname = firstname;
+  if (lastname) user.lastname = lastname;
   if (bio) user.bio = bio;
   if (twitter) user.socialLinks.twitter = twitter;
   if (github) user.socialLinks.github = github;
