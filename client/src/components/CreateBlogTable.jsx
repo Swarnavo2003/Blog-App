@@ -1,10 +1,10 @@
 import { HiDotsVertical } from "react-icons/hi";
-import { FiEdit } from "react-icons/fi";
-import { FaRegTrashCan } from "react-icons/fa6";
 import { useBlogStore } from "../store/useBlogStore";
+import { useNavigate } from "react-router";
 
 const CreateBlogTable = ({ authorBlogs }) => {
   const { deleteBlog } = useBlogStore();
+  const navigate = useNavigate();
   return (
     <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100 shadow-lg">
       <table className="table">
@@ -54,6 +54,13 @@ const CreateBlogTable = ({ authorBlogs }) => {
                       >
                         {/* <FaRegTrashCan /> */}
                         <span>Delete</span>
+                      </li>
+                      <li
+                        onClick={() => navigate(`/blog/${blog._id}`)}
+                        className="flex gap-2"
+                      >
+                        {/* <FiEdit className="text-black" /> */}
+                        <span>Preview</span>
                       </li>
                     </ul>
                   </div>

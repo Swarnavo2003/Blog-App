@@ -68,7 +68,7 @@ export const getBlogById = asyncHandler(async (req, res, next) => {
     throw new ApiError(404, "No user with this userId exists");
   }
 
-  const blog = await Blog.findById(blogId);
+  const blog = await Blog.findById(blogId).populate("author");
 
   return res.status(200).json(new ApiResponse(200, blog, `Blog Fetched`));
 });
